@@ -1,0 +1,42 @@
+Automated ELT Data Pipeline with Snowflake
+Project Overview
+This project demonstrates the construction of a fully automated ELT (Extract, Load, Transform) data pipeline using Snowflake. The pipeline ingests raw customer data, transforms it for analysis, and schedules the entire process to run on a regular basis, ensuring the data is always up-to-date. The final, transformed data is ready for business intelligence (BI) and reporting.
+
+Architecture
+The data pipeline follows a simple and effective three-stage ELT process:
+
+Extract & Load: Raw data from a CSV file is loaded directly into a staging table in Snowflake.
+
+Transform: SQL is used to clean, standardize, and enrich the raw data. A new, transformed table is created for downstream consumption.
+
+Automate & Display: A Snowflake Task is set up to automate the transformation query on a regular schedule. The final results are displayed in a Snowflake Dashboard for visualization.
+
+# Key Features
+Data Ingestion: Successfully loaded raw data into a Snowflake table.
+
+Data Transformation: Utilized SQL CASE statements and other functions to clean and standardize the billing_cycle column.
+
+Pipeline Automation: Created a Snowflake Task to run the transformation query on a 15-minute schedule, creating a hands-free, automated pipeline.
+
+Data Visualization: The transformed data is structured for easy analysis and visualization in dashboards.
+
+Technologies Used
+Snowflake: Cloud data warehouse used for all data storage, processing, and pipeline automation.
+
+SQL: The primary language for all data transformation and task creation logic.
+
+Power BI: A business intelligence tool (used externally) to connect to the final Snowflake table for visualization and reporting.
+
+# How to Run This Project
+To replicate this project in your own Snowflake environment:
+
+Upload the CSV: Upload the beta_connect_data.csv file into a table in your Snowflake database.
+
+Copy and Paste: Copy all of the SQL queries from the SQL Queries section above.
+
+Execute: Paste the code into a single Snowflake worksheet and run it. This will create the transformed table and the automated task.
+
+Visuals: For a live preview of the project architecture and dashboard, please refer to the attached screenshots.
+
+
+Power BI: A business intelligence tool (used externally) to connect to the final Snowflake table for visualization and reporting.
