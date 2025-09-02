@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Snowflake ELT Pipeline</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6;
+        }
+        .pipeline-stage {
+            @apply flex flex-col items-center justify-center p-4 rounded-lg transition-transform duration-500 ease-in-out transform hover:scale-105 shadow-md;
+        }
+        .pipeline-arrow {
+            @apply text-gray-400 text-3xl mx-4 transition-transform duration-500 ease-in-out;
+        }
+        .active-stage {
+            @apply bg-blue-500 text-white shadow-lg;
+            animation: pulse-active 1.5s infinite;
+        }
+        .active-arrow {
+            @apply text-blue-500 transform scale-125;
+        }
+        @keyframes pulse-active {
+            0% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(59, 130, 246, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0); }
+        }
+        .sql-code {
+            background-color: #1f2937;
+            color: #d1d5db;
+            font-family: 'Courier New', Courier, monospace;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            overflow-x: auto;
+            max-height: 400px;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen p-4">
+
+    <div class="max-w-6xl mx-auto w-full bg-white rounded-xl shadow-lg p-8">
+
+        <!-- Header -->
+        <h1 class="text-4xl font-bold text-center text-gray-800 mb-2">Live Snowflake ELT Pipeline</h1>
+        <p class="text-center text-gray-500 mb-8">A visual and interactive overview of the data pipeline created in Snowflake.</p>
+
+        <!-- Pipeline Diagram -->
+        <div class="flex flex-col md:flex-row items-center justify-center space-y-8 md:space-y-0 md:space-x-8 mb-12">
+            
+            <!-- Stage 1: Data Ingestion -->
+            <div id="stage-1" class="pipeline-stage bg-gray-200">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mb-2 text-gray-500" viewBox="0 0 20 20" fill="currentColor">
+                    <path d="M5 3a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2V5a2 2 0 00-2-2H5zM5 11a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2v-2a2 2 0 00-2-2H5zM11 5a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V5zM11 13a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+                </svg>
+                <span class="text-sm font-semibold">1. Data Load</span>
+            </div>
+
+            <span id="arrow-1" class="pipeline-arrow">&rarr;</span>
+
+            <!-- Stage 2: Transformation -->
+            <div id="stage-2" class="pipeline-stage bg-gray-200">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mb-2 text-gray-500" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M3 3a1 1 0 000 2v8a2 2 0 002 2h2.5a.5.5 0 000-1H5a1 1 0 01-1-1V5a1 1 0 000-2H3zm12 0a1 1 0 00-1 1v12a.5.5 0 001 0V4a1 1 0 00-1-1zM4 16h1a1 1 0 011 1v1a1 1 0 01-1 1H4a1 1 0 01-1-1v-1a1 1 0 011-1z" clip-rule="evenodd" />
+                    <path fill-rule="evenodd" d="M12.586 4.586a2 2 0 112.828 2.828l-3.828 3.828a2 2 0 01-2.828-2.828l3.828-3.828z" clip-rule="evenodd" />
+                </svg>
+                <span class="text-sm font-semibold">2. SQL Transformation</span>
+            </div>
+
+            <span id="arrow-2" class="pipeline-arrow">&rarr;</span>
+            
+            <!-- Stage 3: Automation & Display -->
+            <div id="stage-3" class="pipeline-stage bg-gray-200">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mb-2 text-gray-500" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd" />
+                </svg>
+                <span class="text-sm font-semibold">3. Automation & Display</span>
+            </div>
+        </div>
+
+        <!-- Action Button and Status Message -->
+        <div class="flex flex-col items-center mb-12">
+            <button id="run-button" class="bg-indigo-600 text-white font-semibold py-3 px-8 rounded-full shadow-lg hover:bg-indigo-700 transition-colors duration-300">
+                Run Pipeline
+            </button>
+            <p id="status-message" class="mt-4 text-gray-600 font-medium"></p>
+        </div>
+
+        <!-- SQL Code Block -->
+        <div class="mt-8">
+            <h2 class="text-xl font-bold text-gray-800 mb-4">The SQL Code</h2>
+            <p class="text-gray-600 mb-2">The Snowflake Task automates this transformation logic on a schedule.</p>
+            <div class="sql-code">
+                <pre><code>
+-- Use database and schema
+USE DATABASE "SNOWFLAKE_LEARNING_DB";
+USE SCHEMA "PUBLIC";
+
+-- Create and schedule the task
+CREATE OR REPLACE TASK "SNOWFLAKE_LEARNING_DB"."PUBLIC"."TRANSFORM_BETA_CONNECT_DATA_TASK"
+    WAREHOUSE = COMPUTE_WH
+    SCHEDULE = '15 MINUTE'
+AS
+    CREATE OR REPLACE TABLE "SNOWFLAKE_LEARNING_DB"."PUBLIC"."TRANSFORMED_BETA_CONNECT_DATA" AS
+    SELECT
+        id,
+        first_name,
+        last_name,
+        email,
+        gender,
+        ip_address,
+        client_id,
+        phone_number,
+        country_code,
+        data_usage,
+        CASE
+            WHEN "STANDARDIZED_BILLING_CYCLE" = 'monthly' THEN 'Monthly'
+            WHEN "STANDARDIZED_BILLING_CYCLE" = 'yearly' THEN 'Yearly'
+            WHEN "STANDARDIZED_BILLING_CYCLE" = 'quarterly' THEN 'Quarterly'
+            ELSE 'Other'
+        END AS standardized_billing_cycle,
+        internet_speed,
+        contract_start_date,
+        contract_end_date,
+        monthly_bill_amount,
+        service_type,
+        contract_duration_days
+    FROM "SNOWFLAKE_LEARNING_DB"."PUBLIC"."BETA_CONNECT_DATA";
+
+-- Activate the task
+ALTER TASK "SNOWFLAKE_LEARNING_DB"."PUBLIC"."TRANSFORM_BETA_CONNECT_DATA_TASK" RESUME;
+                </code></pre>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        const runButton = document.getElementById('run-button');
+        const statusMessage = document.getElementById('status-message');
+        const stages = [
+            { id: 'stage-1', label: '1. Data Load' },
+            { id: 'stage-2', label: '2. SQL Transformation' },
+            { id: 'stage-3', label: '3. Automation & Display' }
+        ];
+        const arrows = [
+            { id: 'arrow-1' },
+            { id: 'arrow-2' }
+        ];
+
+        const runPipeline = () => {
+            // Disable button and reset status
+            runButton.disabled = true;
+            statusMessage.textContent = 'Pipeline running...';
+            
+            // Clear existing active states
+            stages.forEach(s => document.getElementById(s.id).classList.remove('active-stage'));
+            arrows.forEach(a => document.getElementById(a.id).classList.remove('active-arrow'));
+
+            // Animate pipeline stages
+            let delay = 0;
+            stages.forEach((stage, index) => {
+                setTimeout(() => {
+                    document.getElementById(stage.id).classList.add('active-stage');
+                    statusMessage.textContent = `Processing: ${stage.label}...`;
+                    if (index > 0) {
+                        document.getElementById(arrows[index - 1].id).classList.add('active-arrow');
+                    }
+                }, delay);
+                delay += 1000;
+            });
+
+            // Set final status and re-enable button
+            setTimeout(() => {
+                statusMessage.textContent = 'Pipeline complete! The data is now live on your dashboard.';
+                runButton.disabled = false;
+            }, delay);
+        };
+
+        runButton.addEventListener('click', runPipeline);
+
+        // Initial status message
+        window.onload = () => {
+            statusMessage.textContent = 'Click to run the live data pipeline.';
+        };
+    </script>
