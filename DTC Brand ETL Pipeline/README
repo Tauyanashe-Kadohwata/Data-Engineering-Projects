@@ -1,0 +1,23 @@
+Project Workflow
+
+The architecture follows a simple, robust "Bronze-to-Silver" model, with Power BI acting as the final Gold/Analytics layer.
+
+Bronze Layer (Raw Data): The raw Video Games Data.csv is uploaded to a Databricks Volume to act as the "data lake."
+
+Silver Layer (Transformed Data): A Delta Live Tables (DLT) pipeline (dlt_pipeline_corrected.py) automatically reads this raw data, cleans it, casts data types, handles nulls, and saves the result as a new Delta table named processed_games.
+
+Gold Layer (Analytics): Power BI connects directly to the Databricks SQL Warehouse, imports the clean processed_games table, and presents a series of interactive dashboards for business analysis.
+
+Technologies Used
+
+Data Platform: Databricks
+
+ETL Framework: Delta Live Tables (DLT) with Python (PySpark)
+
+Data Storage: Databricks Volumes (for raw files), Delta Lake (for managed tables)
+
+Business Intelligence: Power BI Desktop
+
+Final Dashboards & Analysis
+
+The final Power BI report analyzes sales trends, regional performance, and the relationship between critic scores and sales.
