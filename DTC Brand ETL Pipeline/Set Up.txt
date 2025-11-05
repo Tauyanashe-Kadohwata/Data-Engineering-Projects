@@ -1,0 +1,12 @@
+CREATE SCHEMA IF NOT EXISTS bronze_layer
+COMMENT 'Raw data ingestion layer';
+
+CREATE SCHEMA IF NOT EXISTS silver_layer
+COMMENT 'Data transformation layer';
+
+CREATE SCHEMA IF NOT EXISTS gold_layer
+COMMENT 'Business level aggregates';
+
+SHOW SCHEMAS;
+
+USE SCHEMA bronze_layer;
